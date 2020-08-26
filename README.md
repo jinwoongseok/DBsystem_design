@@ -21,6 +21,9 @@ Detail description : DB_info file
 - Notepad++  
 
 ## Screenshots
-- ![er_diagram](./img/er_diagram.png)
-- ![er_physic](./img/er_physic.png)
-- ![homepage](./img/Home.png)
+- ER-diagram  
+![er_diagram](./img/er_diagram.png)  
+- ER-physic diagram  
+![er_physic](./img/er_physic.png)  
+- Homepage  
+![homepage](./img/Home.png)
