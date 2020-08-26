@@ -1,0 +1,1666 @@
+
+CREATE TABLE [BUY]
+( 
+	[Gnumber]            int  NOT NULL ,
+	[id]                 varchar(15)  NOT NULL ,
+	[Bnumber]            int  NOT NULL ,
+	[BuyDate]            datetime  NOT NULL ,
+	[Breview]            varchar(70)  NULL ,
+	[Quantity]           int  NOT NULL 
+)
+go
+
+ALTER TABLE [BUY]
+	ADD CONSTRAINT [XPKBUY] PRIMARY KEY  CLUSTERED ([Gnumber] ASC,[id] ASC,[Bnumber] ASC)
+go
+
+CREATE TABLE [COMMENT]
+( 
+	[CMnumber]           int  NOT NULL ,
+	[CMcontents]         varchar(200)  NOT NULL ,
+	[Fnumber]            int  NOT NULL ,
+	[id]                 varchar(15)  NOT NULL ,
+	[writerID]           varchar(15)  NOT NULL 
+)
+go
+
+ALTER TABLE [COMMENT]
+	ADD CONSTRAINT [XPKCOMMENT] PRIMARY KEY  CLUSTERED ([CMnumber] ASC,[Fnumber] ASC,[id] ASC,[writerID] ASC)
+go
+
+CREATE TABLE [CONSULT]
+( 
+	[id]                 varchar(15)  NOT NULL ,
+	[Vnumber]            int  NOT NULL ,
+	[question]           text  NOT NULL ,
+	[ConsultDate]        datetime  NOT NULL ,
+	[Cnumber]            int  NOT NULL ,
+	[answer]             varchar(max)  NULL ,
+	[Creview]            varchar(100)  NULL 
+)
+go
+
+ALTER TABLE [CONSULT]
+	ADD CONSTRAINT [XPKCONSULT] PRIMARY KEY  CLUSTERED ([id] ASC,[Vnumber] ASC,[Cnumber] ASC)
+go
+
+CREATE TABLE [DONATE]
+( 
+	[id]                 varchar(15)  NOT NULL ,
+	[Pnumber]            int  NOT NULL ,
+	[DonatePrice]        int  NOT NULL ,
+	[DonateDate]         datetime  NOT NULL ,
+	[Dnumber]            int  NOT NULL 
+)
+go
+
+ALTER TABLE [DONATE]
+	ADD CONSTRAINT [XPKDONATE] PRIMARY KEY  CLUSTERED ([id] ASC,[Pnumber] ASC,[Dnumber] ASC)
+go
+
+CREATE TABLE [ENCYCLOPEDIA]
+( 
+	[Enumber]            int  NOT NULL ,
+	[Etitle]             varchar(50)  NOT NULL ,
+	[Econtents]          varchar(max)  NULL ,
+	[Vnumber]            int  NOT NULL 
+)
+go
+
+ALTER TABLE [ENCYCLOPEDIA]
+	ADD CONSTRAINT [XPKENCYCLOPEDIA] PRIMARY KEY  CLUSTERED ([Enumber] ASC,[Vnumber] ASC)
+go
+
+CREATE TABLE [FREEPOST]
+( 
+	[Fnumber]            int  NOT NULL ,
+	[Fcontents]          varchar(max)  NULL ,
+	[id]                 varchar(15)  NOT NULL ,
+	[WriteDate]          datetime  NOT NULL ,
+	[Ftilte]             varchar(150)  NOT NULL 
+)
+go
+
+ALTER TABLE [FREEPOST]
+	ADD CONSTRAINT [XPKFREEPOST] PRIMARY KEY  CLUSTERED ([Fnumber] ASC,[id] ASC)
+go
+
+CREATE TABLE [GOODS]
+( 
+	[Gnumber]            int  NOT NULL ,
+	[Gname]              varchar(70)  NOT NULL ,
+	[price]              int  NOT NULL ,
+	[purpose]            varchar(15)  NULL 
+)
+go
+
+ALTER TABLE [GOODS]
+	ADD CONSTRAINT [XPKGOODS] PRIMARY KEY  CLUSTERED ([Gnumber] ASC)
+go
+
+CREATE TABLE [MEMBER]
+( 
+	[id]                 varchar(15)  NOT NULL ,
+	[password]           varchar(15)  NOT NULL ,
+	[Mphone]             char(13)  NULL ,
+	[Maddress]           varchar(70)  NULL ,
+	[Mname]              char(10)  NOT NULL 
+)
+go
+
+ALTER TABLE [MEMBER]
+	ADD CONSTRAINT [XPKMEMBER] PRIMARY KEY  CLUSTERED ([id] ASC)
+go
+
+CREATE TABLE [PET]
+( 
+	[RegNumber]          int  NOT NULL ,
+	[id]                 varchar(15)  NULL ,
+	[sex]                char(2)  NOT NULL ,
+	[type]               varchar(10)  NOT NULL ,
+	[Aname]              varchar(10)  NOT NULL ,
+	[adopt]              char(1)  NOT NULL 
+)
+go
+
+ALTER TABLE [PET]
+	ADD CONSTRAINT [XPKPET] PRIMARY KEY  CLUSTERED ([RegNumber] ASC)
+go
+
+CREATE TABLE [PROTECTIONORGANIZATION]
+( 
+	[Pnumber]            int  NOT NULL ,
+	[Pname]              varchar(30)  NOT NULL ,
+	[Pphone]             char(13)  NULL ,
+	[Paddress]           varchar(70)  NOT NULL 
+)
+go
+
+ALTER TABLE [PROTECTIONORGANIZATION]
+	ADD CONSTRAINT [XPKPROTECTIONORGANIZATION] PRIMARY KEY  CLUSTERED ([Pnumber] ASC)
+go
+
+CREATE TABLE [VET]
+( 
+	[Vnumber]            int  NOT NULL ,
+	[Vname]              varchar(10)  NULL ,
+	[Vphone]             char(13)  NULL ,
+	[HospitalAddr]       varchar(70)  NULL 
+)
+go
+
+ALTER TABLE [VET]
+	ADD CONSTRAINT [XPKVET] PRIMARY KEY  CLUSTERED ([Vnumber] ASC)
+go
+
+
+ALTER TABLE [BUY]
+	ADD CONSTRAINT [R_34] FOREIGN KEY ([Gnumber]) REFERENCES [GOODS]([Gnumber])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [BUY]
+	ADD CONSTRAINT [R_35] FOREIGN KEY ([id]) REFERENCES [MEMBER]([id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [COMMENT]
+	ADD CONSTRAINT [writing] FOREIGN KEY ([Fnumber],[id]) REFERENCES [FREEPOST]([Fnumber],[id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [CONSULT]
+	ADD CONSTRAINT [R_38] FOREIGN KEY ([id]) REFERENCES [MEMBER]([id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [CONSULT]
+	ADD CONSTRAINT [R_39] FOREIGN KEY ([Vnumber]) REFERENCES [VET]([Vnumber])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [DONATE]
+	ADD CONSTRAINT [R_18] FOREIGN KEY ([id]) REFERENCES [MEMBER]([id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [DONATE]
+	ADD CONSTRAINT [R_19] FOREIGN KEY ([Pnumber]) REFERENCES [PROTECTIONORGANIZATION]([Pnumber])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [ENCYCLOPEDIA]
+	ADD CONSTRAINT [Write] FOREIGN KEY ([Vnumber]) REFERENCES [VET]([Vnumber])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [FREEPOST]
+	ADD CONSTRAINT [Use] FOREIGN KEY ([id]) REFERENCES [MEMBER]([id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+
+ALTER TABLE [PET]
+	ADD CONSTRAINT [Raise] FOREIGN KEY ([id]) REFERENCES [MEMBER]([id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+CREATE TRIGGER tD_GOODS ON GOODS FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on GOODS */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* GOODS  BUY on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0000efde", PARENT_OWNER="", PARENT_TABLE="GOODS"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_34", FK_COLUMNS="Gnumber" */
+    IF EXISTS (
+      SELECT * FROM deleted,BUY
+      WHERE
+        /*  %JoinFKPK(BUY,deleted," = "," AND") */
+        BUY.Gnumber = deleted.Gnumber
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete GOODS because BUY exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_GOODS ON GOODS FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on GOODS */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insGnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* GOODS  BUY on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00010e6c", PARENT_OWNER="", PARENT_TABLE="GOODS"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_34", FK_COLUMNS="Gnumber" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Gnumber)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,BUY
+      WHERE
+        /*  %JoinFKPK(BUY,deleted," = "," AND") */
+        BUY.Gnumber = deleted.Gnumber
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update GOODS because BUY exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_MEMBER ON MEMBER FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on MEMBER */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* MEMBER  CONSULT on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00042f30", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_38", FK_COLUMNS="id" */
+    IF EXISTS (
+      SELECT * FROM deleted,CONSULT
+      WHERE
+        /*  %JoinFKPK(CONSULT,deleted," = "," AND") */
+        CONSULT.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete MEMBER because CONSULT exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  BUY on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_35", FK_COLUMNS="id" */
+    IF EXISTS (
+      SELECT * FROM deleted,BUY
+      WHERE
+        /*  %JoinFKPK(BUY,deleted," = "," AND") */
+        BUY.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete MEMBER because BUY exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  PET on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="PET"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Raise", FK_COLUMNS="id" */
+    IF EXISTS (
+      SELECT * FROM deleted,PET
+      WHERE
+        /*  %JoinFKPK(PET,deleted," = "," AND") */
+        PET.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete MEMBER because PET exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  DONATE on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_18", FK_COLUMNS="id" */
+    IF EXISTS (
+      SELECT * FROM deleted,DONATE
+      WHERE
+        /*  %JoinFKPK(DONATE,deleted," = "," AND") */
+        DONATE.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete MEMBER because DONATE exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  FREEPOST on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="FREEPOST"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Use", FK_COLUMNS="id" */
+    IF EXISTS (
+      SELECT * FROM deleted,FREEPOST
+      WHERE
+        /*  %JoinFKPK(FREEPOST,deleted," = "," AND") */
+        FREEPOST.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete MEMBER because FREEPOST exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_MEMBER ON MEMBER FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on MEMBER */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insid varchar(15),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* MEMBER  CONSULT on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="0004b205", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_38", FK_COLUMNS="id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,CONSULT
+      WHERE
+        /*  %JoinFKPK(CONSULT,deleted," = "," AND") */
+        CONSULT.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update MEMBER because CONSULT exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  BUY on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_35", FK_COLUMNS="id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,BUY
+      WHERE
+        /*  %JoinFKPK(BUY,deleted," = "," AND") */
+        BUY.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update MEMBER because BUY exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  PET on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="PET"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Raise", FK_COLUMNS="id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,PET
+      WHERE
+        /*  %JoinFKPK(PET,deleted," = "," AND") */
+        PET.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update MEMBER because PET exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  DONATE on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_18", FK_COLUMNS="id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,DONATE
+      WHERE
+        /*  %JoinFKPK(DONATE,deleted," = "," AND") */
+        DONATE.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update MEMBER because DONATE exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  FREEPOST on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="FREEPOST"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Use", FK_COLUMNS="id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,FREEPOST
+      WHERE
+        /*  %JoinFKPK(FREEPOST,deleted," = "," AND") */
+        FREEPOST.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update MEMBER because FREEPOST exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_BULLETINBOARD ON FREEPOST FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on FREEPOST */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* FREEPOST  COMMENT on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="000225d5", PARENT_OWNER="", PARENT_TABLE="FREEPOST"
+    CHILD_OWNER="", CHILD_TABLE="COMMENT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="writing", FK_COLUMNS="Fnumber""id" */
+    IF EXISTS (
+      SELECT * FROM deleted,COMMENT
+      WHERE
+        /*  %JoinFKPK(COMMENT,deleted," = "," AND") */
+        COMMENT.Fnumber = deleted.Fnumber AND
+        COMMENT.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete FREEPOST because COMMENT exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  FREEPOST on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="FREEPOST"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Use", FK_COLUMNS="id" */
+    IF EXISTS (SELECT * FROM deleted,MEMBER
+      WHERE
+        /* %JoinFKPK(deleted,MEMBER," = "," AND") */
+        deleted.id = MEMBER.id AND
+        NOT EXISTS (
+          SELECT * FROM FREEPOST
+          WHERE
+            /* %JoinFKPK(FREEPOST,MEMBER," = "," AND") */
+            FREEPOST.id = MEMBER.id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last FREEPOST because MEMBER exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_BULLETINBOARD ON FREEPOST FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on FREEPOST */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insFnumber int, 
+           @insid varchar(15),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* FREEPOST  COMMENT on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00026ef1", PARENT_OWNER="", PARENT_TABLE="FREEPOST"
+    CHILD_OWNER="", CHILD_TABLE="COMMENT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="writing", FK_COLUMNS="Fnumber""id" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Fnumber) OR
+    UPDATE(id)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,COMMENT
+      WHERE
+        /*  %JoinFKPK(COMMENT,deleted," = "," AND") */
+        COMMENT.Fnumber = deleted.Fnumber AND
+        COMMENT.id = deleted.id
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update FREEPOST because COMMENT exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  FREEPOST on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="FREEPOST"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Use", FK_COLUMNS="id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,MEMBER
+        WHERE
+          /* %JoinFKPK(inserted,MEMBER) */
+          inserted.id = MEMBER.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update FREEPOST because MEMBER does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_PROTECTIONORGANIZATION ON PROTECTIONORGANIZATION FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on PROTECTIONORGANIZATION */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* PROTECTIONORGANIZATION  DONATE on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00011991", PARENT_OWNER="", PARENT_TABLE="PROTECTIONORGANIZATION"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_19", FK_COLUMNS="Pnumber" */
+    IF EXISTS (
+      SELECT * FROM deleted,DONATE
+      WHERE
+        /*  %JoinFKPK(DONATE,deleted," = "," AND") */
+        DONATE.Pnumber = deleted.Pnumber
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete PROTECTIONORGANIZATION because DONATE exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_PROTECTIONORGANIZATION ON PROTECTIONORGANIZATION FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on PROTECTIONORGANIZATION */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insPnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* PROTECTIONORGANIZATION  DONATE on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00013d3c", PARENT_OWNER="", PARENT_TABLE="PROTECTIONORGANIZATION"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_19", FK_COLUMNS="Pnumber" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Pnumber)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,DONATE
+      WHERE
+        /*  %JoinFKPK(DONATE,deleted," = "," AND") */
+        DONATE.Pnumber = deleted.Pnumber
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update PROTECTIONORGANIZATION because DONATE exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_MEMBER_PROTECTIONORGANIZATION ON DONATE FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on DONATE */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* PROTECTIONORGANIZATION  DONATE on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0002725d", PARENT_OWNER="", PARENT_TABLE="PROTECTIONORGANIZATION"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_19", FK_COLUMNS="Pnumber" */
+    IF EXISTS (SELECT * FROM deleted,PROTECTIONORGANIZATION
+      WHERE
+        /* %JoinFKPK(deleted,PROTECTIONORGANIZATION," = "," AND") */
+        deleted.Pnumber = PROTECTIONORGANIZATION.Pnumber AND
+        NOT EXISTS (
+          SELECT * FROM DONATE
+          WHERE
+            /* %JoinFKPK(DONATE,PROTECTIONORGANIZATION," = "," AND") */
+            DONATE.Pnumber = PROTECTIONORGANIZATION.Pnumber
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last DONATE because PROTECTIONORGANIZATION exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  DONATE on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_18", FK_COLUMNS="id" */
+    IF EXISTS (SELECT * FROM deleted,MEMBER
+      WHERE
+        /* %JoinFKPK(deleted,MEMBER," = "," AND") */
+        deleted.id = MEMBER.id AND
+        NOT EXISTS (
+          SELECT * FROM DONATE
+          WHERE
+            /* %JoinFKPK(DONATE,MEMBER," = "," AND") */
+            DONATE.id = MEMBER.id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last DONATE because MEMBER exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_MEMBER_PROTECTIONORGANIZATION ON DONATE FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on DONATE */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insid varchar(15), 
+           @insPnumber int, 
+           @insDnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* PROTECTIONORGANIZATION  DONATE on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0002c0b1", PARENT_OWNER="", PARENT_TABLE="PROTECTIONORGANIZATION"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_19", FK_COLUMNS="Pnumber" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Pnumber)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,PROTECTIONORGANIZATION
+        WHERE
+          /* %JoinFKPK(inserted,PROTECTIONORGANIZATION) */
+          inserted.Pnumber = PROTECTIONORGANIZATION.Pnumber
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update DONATE because PROTECTIONORGANIZATION does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  DONATE on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="DONATE"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_18", FK_COLUMNS="id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,MEMBER
+        WHERE
+          /* %JoinFKPK(inserted,MEMBER) */
+          inserted.id = MEMBER.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update DONATE because MEMBER does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_PET ON PET FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on PET */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insRegNumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* MEMBER  PET on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="000173a9", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="PET"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Raise", FK_COLUMNS="id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,MEMBER
+        WHERE
+          /* %JoinFKPK(inserted,MEMBER) */
+          inserted.id = MEMBER.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    select @nullcnt = count(*) from inserted where
+      inserted.id IS NULL
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update PET because MEMBER does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_GOODS_MEMBER ON BUY FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on BUY */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* MEMBER  BUY on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00022dc8", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_35", FK_COLUMNS="id" */
+    IF EXISTS (SELECT * FROM deleted,MEMBER
+      WHERE
+        /* %JoinFKPK(deleted,MEMBER," = "," AND") */
+        deleted.id = MEMBER.id AND
+        NOT EXISTS (
+          SELECT * FROM BUY
+          WHERE
+            /* %JoinFKPK(BUY,MEMBER," = "," AND") */
+            BUY.id = MEMBER.id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last BUY because MEMBER exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* GOODS  BUY on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="GOODS"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_34", FK_COLUMNS="Gnumber" */
+    IF EXISTS (SELECT * FROM deleted,GOODS
+      WHERE
+        /* %JoinFKPK(deleted,GOODS," = "," AND") */
+        deleted.Gnumber = GOODS.Gnumber AND
+        NOT EXISTS (
+          SELECT * FROM BUY
+          WHERE
+            /* %JoinFKPK(BUY,GOODS," = "," AND") */
+            BUY.Gnumber = GOODS.Gnumber
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last BUY because GOODS exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_GOODS_MEMBER ON BUY FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on BUY */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insGnumber int, 
+           @insid varchar(15), 
+           @insBnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* MEMBER  BUY on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00028f86", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_35", FK_COLUMNS="id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,MEMBER
+        WHERE
+          /* %JoinFKPK(inserted,MEMBER) */
+          inserted.id = MEMBER.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update BUY because MEMBER does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* GOODS  BUY on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="GOODS"
+    CHILD_OWNER="", CHILD_TABLE="BUY"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_34", FK_COLUMNS="Gnumber" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Gnumber)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,GOODS
+        WHERE
+          /* %JoinFKPK(inserted,GOODS) */
+          inserted.Gnumber = GOODS.Gnumber
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update BUY because GOODS does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER Trigger_486 ON VET FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on VET */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* VET  ENCYCLOPEDIA on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="0001e848", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="ENCYCLOPEDIA"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Write", FK_COLUMNS="Vnumber" */
+    IF EXISTS (
+      SELECT * FROM deleted,ENCYCLOPEDIA
+      WHERE
+        /*  %JoinFKPK(ENCYCLOPEDIA,deleted," = "," AND") */
+        ENCYCLOPEDIA.Vnumber = deleted.Vnumber
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete VET because ENCYCLOPEDIA exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* VET  CONSULT on parent delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_39", FK_COLUMNS="Vnumber" */
+    IF EXISTS (
+      SELECT * FROM deleted,CONSULT
+      WHERE
+        /*  %JoinFKPK(CONSULT,deleted," = "," AND") */
+        CONSULT.Vnumber = deleted.Vnumber
+    )
+    BEGIN
+      SELECT @errno  = 30001,
+             @errmsg = 'Cannot delete VET because CONSULT exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER Trigger_487 ON VET FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on VET */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insVnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* VET  ENCYCLOPEDIA on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00022446", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="ENCYCLOPEDIA"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Write", FK_COLUMNS="Vnumber" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Vnumber)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,ENCYCLOPEDIA
+      WHERE
+        /*  %JoinFKPK(ENCYCLOPEDIA,deleted," = "," AND") */
+        ENCYCLOPEDIA.Vnumber = deleted.Vnumber
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update VET because ENCYCLOPEDIA exists.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* VET  CONSULT on parent update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_39", FK_COLUMNS="Vnumber" */
+  IF
+    /* %ParentPK(" OR",UPDATE) */
+    UPDATE(Vnumber)
+  BEGIN
+    IF EXISTS (
+      SELECT * FROM deleted,CONSULT
+      WHERE
+        /*  %JoinFKPK(CONSULT,deleted," = "," AND") */
+        CONSULT.Vnumber = deleted.Vnumber
+    )
+    BEGIN
+      SELECT @errno  = 30005,
+             @errmsg = 'Cannot update VET because CONSULT exists.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER Trigger_497 ON CONSULT FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on CONSULT */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* VET  CONSULT on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00023a3a", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_39", FK_COLUMNS="Vnumber" */
+    IF EXISTS (SELECT * FROM deleted,VET
+      WHERE
+        /* %JoinFKPK(deleted,VET," = "," AND") */
+        deleted.Vnumber = VET.Vnumber AND
+        NOT EXISTS (
+          SELECT * FROM CONSULT
+          WHERE
+            /* %JoinFKPK(CONSULT,VET," = "," AND") */
+            CONSULT.Vnumber = VET.Vnumber
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last CONSULT because VET exists.'
+      GOTO error
+    END
+
+    /* erwin Builtin Trigger */
+    /* MEMBER  CONSULT on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_38", FK_COLUMNS="id" */
+    IF EXISTS (SELECT * FROM deleted,MEMBER
+      WHERE
+        /* %JoinFKPK(deleted,MEMBER," = "," AND") */
+        deleted.id = MEMBER.id AND
+        NOT EXISTS (
+          SELECT * FROM CONSULT
+          WHERE
+            /* %JoinFKPK(CONSULT,MEMBER," = "," AND") */
+            CONSULT.id = MEMBER.id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last CONSULT because MEMBER exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER Trigger_498 ON CONSULT FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on CONSULT */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insid varchar(15), 
+           @insVnumber int, 
+           @insCnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* VET  CONSULT on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="000287cf", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_39", FK_COLUMNS="Vnumber" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Vnumber)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,VET
+        WHERE
+          /* %JoinFKPK(inserted,VET) */
+          inserted.Vnumber = VET.Vnumber
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update CONSULT because VET does not exist.'
+      GOTO error
+    END
+  END
+
+  /* erwin Builtin Trigger */
+  /* MEMBER  CONSULT on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="MEMBER"
+    CHILD_OWNER="", CHILD_TABLE="CONSULT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="R_38", FK_COLUMNS="id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,MEMBER
+        WHERE
+          /* %JoinFKPK(inserted,MEMBER) */
+          inserted.id = MEMBER.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update CONSULT because MEMBER does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_ENCYCLOPEDIA ON ENCYCLOPEDIA FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on ENCYCLOPEDIA */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* VET  ENCYCLOPEDIA on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="000147d7", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="ENCYCLOPEDIA"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Write", FK_COLUMNS="Vnumber" */
+    IF EXISTS (SELECT * FROM deleted,VET
+      WHERE
+        /* %JoinFKPK(deleted,VET," = "," AND") */
+        deleted.Vnumber = VET.Vnumber AND
+        NOT EXISTS (
+          SELECT * FROM ENCYCLOPEDIA
+          WHERE
+            /* %JoinFKPK(ENCYCLOPEDIA,VET," = "," AND") */
+            ENCYCLOPEDIA.Vnumber = VET.Vnumber
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last ENCYCLOPEDIA because VET exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_ENCYCLOPEDIA ON ENCYCLOPEDIA FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on ENCYCLOPEDIA */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insEnumber int, 
+           @insVnumber int,
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* VET  ENCYCLOPEDIA on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0001537a", PARENT_OWNER="", PARENT_TABLE="VET"
+    CHILD_OWNER="", CHILD_TABLE="ENCYCLOPEDIA"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="Write", FK_COLUMNS="Vnumber" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Vnumber)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,VET
+        WHERE
+          /* %JoinFKPK(inserted,VET) */
+          inserted.Vnumber = VET.Vnumber
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update ENCYCLOPEDIA because VET does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tD_COMMENT ON COMMENT FOR DELETE AS
+/* erwin Builtin Trigger */
+/* DELETE trigger on COMMENT */
+BEGIN
+  DECLARE  @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+    /* erwin Builtin Trigger */
+    /* FREEPOST  COMMENT on child delete no action */
+    /* ERWIN_RELATION:CHECKSUM="000162fd", PARENT_OWNER="", PARENT_TABLE="FREEPOST"
+    CHILD_OWNER="", CHILD_TABLE="COMMENT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="writing", FK_COLUMNS="Fnumber""id" */
+    IF EXISTS (SELECT * FROM deleted,FREEPOST
+      WHERE
+        /* %JoinFKPK(deleted,FREEPOST," = "," AND") */
+        deleted.Fnumber = FREEPOST.Fnumber AND
+        deleted.id = FREEPOST.id AND
+        NOT EXISTS (
+          SELECT * FROM COMMENT
+          WHERE
+            /* %JoinFKPK(COMMENT,FREEPOST," = "," AND") */
+            COMMENT.Fnumber = FREEPOST.Fnumber AND
+            COMMENT.id = FREEPOST.id
+        )
+    )
+    BEGIN
+      SELECT @errno  = 30010,
+             @errmsg = 'Cannot delete last COMMENT because FREEPOST exists.'
+      GOTO error
+    END
+
+
+    /* erwin Builtin Trigger */
+    RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
+
+CREATE TRIGGER tU_COMMENT ON COMMENT FOR UPDATE AS
+/* erwin Builtin Trigger */
+/* UPDATE trigger on COMMENT */
+BEGIN
+  DECLARE  @numrows int,
+           @nullcnt int,
+           @validcnt int,
+           @insCMnumber int, 
+           @insFnumber int, 
+           @insid varchar(15), 
+           @inswriterID varchar(15),
+           @errno   int,
+           @severity int,
+           @state    int,
+           @errmsg  varchar(255)
+
+  SELECT @numrows = @@rowcount
+  /* erwin Builtin Trigger */
+  /* FREEPOST  COMMENT on child update no action */
+  /* ERWIN_RELATION:CHECKSUM="0001800d", PARENT_OWNER="", PARENT_TABLE="FREEPOST"
+    CHILD_OWNER="", CHILD_TABLE="COMMENT"
+    P2C_VERB_PHRASE="", C2P_VERB_PHRASE="", 
+    FK_CONSTRAINT="writing", FK_COLUMNS="Fnumber""id" */
+  IF
+    /* %ChildFK(" OR",UPDATE) */
+    UPDATE(Fnumber) OR
+    UPDATE(id)
+  BEGIN
+    SELECT @nullcnt = 0
+    SELECT @validcnt = count(*)
+      FROM inserted,FREEPOST
+        WHERE
+          /* %JoinFKPK(inserted,FREEPOST) */
+          inserted.Fnumber = FREEPOST.Fnumber and
+          inserted.id = FREEPOST.id
+    /* %NotnullFK(inserted," IS NULL","select @nullcnt = count(*) from inserted where"," AND") */
+    
+    IF @validcnt + @nullcnt != @numrows
+    BEGIN
+      SELECT @errno  = 30007,
+             @errmsg = 'Cannot update COMMENT because FREEPOST does not exist.'
+      GOTO error
+    END
+  END
+
+
+  /* erwin Builtin Trigger */
+  RETURN
+error:
+   RAISERROR (@errmsg, -- Message text.
+              @severity, -- Severity (0~25).
+              @state) -- State (0~255).
+    rollback transaction
+END
+
+go
+
+
+
